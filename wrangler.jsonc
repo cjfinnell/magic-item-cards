@@ -3,6 +3,8 @@
   "name": "magic-item-cards",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
+  // Regenerate src/items.gen.json before every deploy, so CI needs no separate build step.
+  "build": { "command": "node scripts/build-data.mjs" },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
