@@ -19,8 +19,9 @@ npm run dev     # wrangler dev on http://localhost:8787
 
 ## Deploy
 
-Cloudflare Workers Builds is connected to this repo. Every push to `main` runs
-`npm ci && npm test` then `npx wrangler deploy`. Other branches get preview URLs.
+GitHub Actions ([deploy.yml](.github/workflows/deploy.yml)) runs `npm test` on every
+push and PR. Every push to `main` then runs `npx wrangler deploy` to production.
+The job needs the repo secret `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit).
 
 ## Data and licensing
 
