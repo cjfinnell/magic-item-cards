@@ -1,11 +1,19 @@
 // Routes: /i/<slug> card page, /embed/<slug> iframe card, /api/items[/<slug>] JSON.
+// Spells: /s/<slug>, /embed/s/<slug>, /api/spells[/<slug>]. Spells get their own paths because
+// some names collide with items (Shield).
 // Everything else is a static asset from public/.
 import ITEMS from "./items.gen.json";
-import { esc, page, renderCard } from "./card.js";
+import SPELLS from "./spells.gen.json";
+import { esc, page, renderCard, renderSpellCard } from "./card.js";
 
 const BY_SLUG = new Map(ITEMS.map((i) => [i.slug, i]));
 const INDEX = ITEMS.map(({ slug, name, rarity, category, attunement }) => ({
   slug, name, rarity, category, attunement,
+}));
+
+const SPELL_BY_SLUG = new Map(SPELLS.map((s) => [s.slug, s]));
+const SPELL_INDEX = SPELLS.map(({ slug, name, level, school, classes, ritual, concentration }) => ({
+  slug, name, level, school, classes, ritual, concentration,
 }));
 
 const html = (body, status = 200, extra = {}) =>
@@ -24,8 +32,18 @@ const json = (data, status = 200) =>
     },
   });
 
-function notFound(slug) {
-  return html(page({ title: "Item not found", body: `<p class="missing">No SRD magic item called "${esc(slug)}".</p>` }), 404);
+function notFound(slug, kind = "magic item") {
+  return html(page({ title: "Not found", body: `<p class="missing">No SRD ${kind} called "${esc(slug)}".</p>` }), 404);
+}
+
+// Full page with share box, or a bare embeddable card whose title links back to the full page.
+function cardPage(url, { name, render, path, embedPath, back }) {
+  if (!embedPath) return html(page({ title: name, body: render({ link: `${url.origin}${path}` }), embed: true }));
+  const embedCode = `<iframe src="${url.origin}${embedPath}" width="400" height="500" style="border:0" loading="lazy" title="${esc(name)}"></iframe>`;
+  const body = `<main>${render({})}
+<section class="share"><label>Embed this card<textarea readonly rows="3">${esc(embedCode)}</textarea></label>
+<p><a href="${back[1]}">${back[0]}</a></p></section></main>`;
+  return html(page({ title: `${name} - Magic Item Cards`, body }));
 }
 
 export function handle(request) {
@@ -40,18 +58,33 @@ export function handle(request) {
     return item ? json(item) : json({ error: "not_found" }, 404);
   }
 
-  if ((route === "i" || route === "embed") && slug) {
-    const item = BY_SLUG.get(slug);
-    if (!item) return notFound(slug);
-    if (route === "i") {
-      const embedCode = `<iframe src="${url.origin}/embed/${item.slug}" width="400" height="500" style="border:0" loading="lazy" title="${esc(item.name)}"></iframe>`;
-      const body = `<main>${renderCard(item)}
-<section class="share"><label>Embed this card<textarea readonly rows="3">${esc(embedCode)}</textarea></label>
-<p><a href="/">All items</a></p></section></main>`;
-      return html(page({ title: `${item.name} - Magic Item Cards`, body }));
+  if (route === "api" && slug === "spells") {
+    const one = parts[2];
+    if (!one) return json(SPELL_INDEX);
+    const spell = SPELL_BY_SLUG.get(one);
+    return spell ? json(spell) : json({ error: "not_found" }, 404);
+  }
+
+  const embed = route === "embed";
+  const isSpell = route === "s" || (embed && slug === "s");
+  const key = embed && isSpell ? parts[2] : slug;
+  if ((route === "i" || route === "s" || embed) && key) {
+    if (isSpell) {
+      const spell = SPELL_BY_SLUG.get(key);
+      if (!spell) return notFound(key, "spell");
+      const path = `/s/${spell.slug}`;
+      return cardPage(url, {
+        name: spell.name, render: (o) => renderSpellCard(spell, o), path,
+        embedPath: !embed && `/embed${path}`, back: ["All spells", "/#spells"],
+      });
     }
-    // Embed view: framable anywhere, title links back to the full card.
-    return html(page({ title: item.name, body: renderCard(item, { link: `${url.origin}/i/${item.slug}` }), embed: true }));
+    const item = BY_SLUG.get(key);
+    if (!item) return notFound(key);
+    const path = `/i/${item.slug}`;
+    return cardPage(url, {
+      name: item.name, render: (o) => renderCard(item, o), path,
+      embedPath: !embed && `/embed/${item.slug}`, back: ["All items", "/"],
+    });
   }
 
   return null;

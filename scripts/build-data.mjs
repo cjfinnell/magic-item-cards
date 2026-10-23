@@ -3,7 +3,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const SRC = new URL("../data/srd/5e-SRD-Magic-Items.json", import.meta.url);
 const OVERRIDES = new URL("../data/srd/table-overrides.json", import.meta.url);
+const SPELLS = new URL("../data/srd/spells.json", import.meta.url);
 const OUT = new URL("../src/items.gen.json", import.meta.url);
+const SPELLS_OUT = new URL("../src/spells.gen.json", import.meta.url);
 
 const RARITY_LINE = /^(Common|Uncommon|Rare|Very Rare|Legendary|Artifact)\b[^.]{0,30}$/;
 
@@ -46,8 +48,15 @@ export function buildItems(rawItems, overrides = loadOverrides()) {
   return items.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+// Spells are already parsed from the SRD 5.2 PDF by scripts/extract-spells.mjs.
+export function loadSpells() {
+  return JSON.parse(readFileSync(SPELLS, "utf8")).sort((a, b) => a.name.localeCompare(b.name));
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const items = buildItems(JSON.parse(readFileSync(SRC, "utf8")));
   writeFileSync(OUT, JSON.stringify(items));
-  console.log(`wrote ${items.length} items to src/items.gen.json`);
+  const spells = loadSpells();
+  writeFileSync(SPELLS_OUT, JSON.stringify(spells));
+  console.log(`wrote ${items.length} items to src/items.gen.json, ${spells.length} spells to src/spells.gen.json`);
 }

@@ -1,4 +1,4 @@
-// HTML rendering for item cards. Shared by the full page and the embed view.
+// HTML rendering for item and spell cards. Shared by the full page and the embed view.
 
 export const ATTRIBUTION =
   'Includes material from the System Reference Document 5.2 by Wizards of the Coast LLC, ' +
@@ -40,8 +40,16 @@ function table({ caption, columns, rows }) {
   return `<table>${cap}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
+function statblock({ name, meta, body }) {
+  const inner = body.map((b) => (b.heading ? `<h4>${esc(b.heading)}</h4>` : block(b))).join("");
+  return `<section class="statblock"><h3>${esc(name)}</h3><p class="sub">${esc(meta)}</p>${inner}</section>`;
+}
+
 function block(b) {
-  return typeof b === "string" ? para(b) : table(b.table);
+  if (typeof b === "string") return para(b);
+  if (b.list) return `<ul>${b.list.map((li) => `<li>${esc(li)}</li>`).join("")}</ul>`;
+  if (b.statblock) return statblock(b.statblock);
+  return table(b.table);
 }
 
 export function renderCard(item, { link } = {}) {
@@ -51,6 +59,25 @@ export function renderCard(item, { link } = {}) {
   return `<article class="card ${rarityClass(item.rarity)}">
   <header><h2>${title}</h2><p class="sub">${esc(subtitle(item))}</p></header>
   <div class="body">${item.body.map(block).join("")}</div>
+  <footer>${ATTRIBUTION}</footer>
+</article>`;
+}
+
+// Spells reuse the card frame; the accent follows the spell level instead of rarity.
+export function renderSpellCard(spell, { link } = {}) {
+  const title = link
+    ? `<a href="${esc(link)}" target="_blank" rel="noopener">${esc(spell.name)}</a>`
+    : esc(spell.name);
+  const stats = [
+    ["Casting Time", spell.castingTime],
+    ["Range", spell.range],
+    ["Components", spell.components],
+    ["Duration", spell.duration],
+  ].map(([k, v]) => `<li><strong>${k}:</strong> ${esc(v)}</li>`).join("");
+  return `<article class="card spell lvl-${spell.level}">
+  <header><h2>${title}</h2><p class="sub">${esc(spell.subtitle)}</p></header>
+  <ul class="stats">${stats}</ul>
+  <div class="body">${spell.body.map(block).join("")}</div>
   <footer>${ATTRIBUTION}</footer>
 </article>`;
 }

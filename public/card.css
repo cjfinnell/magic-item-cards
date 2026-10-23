@@ -31,6 +31,8 @@ a { color: inherit; }
 
 #q { width: 100%; padding: .6rem .8rem; font-size: 1rem; border: 2px solid var(--edge); border-radius: 8px; background: var(--paper); }
 #filters { display: flex; gap: .5rem; flex-wrap: wrap; margin: .6rem 0; }
+#item-filters, #spell-filters { display: contents; }
+#item-filters[hidden], #spell-filters[hidden] { display: none; }
 #filters select { padding: .3rem; background: var(--paper); border: 1px solid var(--edge); border-radius: 6px; }
 #list { list-style: none; padding: 0; margin: 0; }
 #list li { padding: .45rem .2rem; border-bottom: 1px solid var(--edge); display: flex; justify-content: space-between; gap: .5rem; }
@@ -44,3 +46,13 @@ a { color: inherit; }
 .card .body td { vertical-align: top; padding: .25rem .4rem; border-bottom: 1px solid rgba(0,0,0,.12); }
 .card .body td:first-child { white-space: nowrap; }
 .card .body tbody tr:nth-child(even) { background: rgba(0,0,0,.04); }
+
+.card.spell { --accent: #8a5a00; }
+.card.lvl-0 { --accent: #6b6b6b; } .card.lvl-1, .card.lvl-2 { --accent: var(--r-uncommon); }
+.card.lvl-3, .card.lvl-4 { --accent: var(--r-rare); } .card.lvl-5, .card.lvl-6 { --accent: var(--r-very-rare); }
+.card.lvl-7, .card.lvl-8 { --accent: var(--r-legendary); } .card.lvl-9 { --accent: var(--r-artifact); }
+.card .stats { list-style: none; padding: 0 0 .4rem; margin: 0 0 .4rem; border-bottom: 1px solid var(--edge); font-size: .9rem; }
+.card .body ul { margin: .4rem 0; padding-left: 1.2rem; }
+.card .statblock { border: 1px solid var(--edge); border-radius: 6px; padding: .5rem .7rem; margin: .6rem 0; background: rgba(0,0,0,.03); font-size: .9rem; }
+.card .statblock h3 { margin: 0; font-variant: small-caps; }
+.card .statblock h4 { margin: .6rem 0 .2rem; border-bottom: 1px solid var(--edge); }
