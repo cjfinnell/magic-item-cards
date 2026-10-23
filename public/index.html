@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Magic Item Cards</title>
+<meta name="description" content="Shareable, embeddable 5e magic item cards from the SRD 5.2.">
+<link rel="stylesheet" href="/card.css">
+</head>
+<body class="full">
+<header>
+  <h1>Magic Item Cards</h1>
+  <p>Shareable, embeddable cards for every magic item in the 5e SRD 5.2.</p>
+</header>
+<main>
+  <input id="q" type="search" placeholder="Search items, e.g. bag of holding" autofocus>
+  <div id="filters">
+    <select id="rarity"><option value="">Any rarity</option></select>
+    <select id="category"><option value="">Any type</option></select>
+    <select id="attune"><option value="">Attunement: any</option><option value="1">Requires attunement</option><option value="0">No attunement</option></select>
+  </div>
+  <p class="count" id="count"></p>
+  <ul id="list"></ul>
+  <p class="legal">This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at <a href="https://www.dndbeyond.com/srd">dndbeyond.com/srd</a>. The SRD 5.2 is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International License</a>. Not affiliated with or endorsed by Wizards of the Coast.</p>
+</main>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

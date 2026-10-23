@@ -1,0 +1,16 @@
+Magic Item Cards
+
+Item text in data/srd/ includes material from the System Reference Document 5.2
+("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd.
+The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International
+License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+The JSON encoding of that text comes from 5e-bits/5e-database
+(https://github.com/5e-bits/5e-database), commit 6c7f2ed20e66a38fafb29fa0634ed5e13a7f5020,
+file src/2024/en/5e-SRD-Magic-Items.json, under the MIT License:
+
+  Copyright (c) [2018-2020] [Adrian Padua, Christopher Ward]
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this
+  software and associated documentation files, to deal in the Software without
+  restriction, subject to inclusion of this notice. THE SOFTWARE IS PROVIDED "AS IS",
+  WITHOUT WARRANTY OF ANY KIND.

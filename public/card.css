@@ -1,0 +1,40 @@
+:root {
+  --ink: #2b1d0e; --paper: #fbf5e6; --edge: #c9b48a; --muted: #6b5a40;
+  --r-common: #6b6b6b; --r-uncommon: #2e7d32; --r-rare: #1565c0;
+  --r-very-rare: #6a1b9a; --r-legendary: #e65100; --r-artifact: #b71c1c; --r-varies: #5d4037;
+  font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #ece3cf; }
+body.full main, body.full > header, body.full > section { max-width: 760px; margin: 0 auto; padding: 1rem; }
+body.embed { background: transparent; }
+a { color: inherit; }
+
+.card {
+  --accent: var(--r-varies);
+  background: var(--paper); border: 2px solid var(--edge); border-top: 8px solid var(--accent);
+  border-radius: 10px; padding: 1rem 1.1rem; max-width: 420px; margin: 0 auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,.15); line-height: 1.4; font-size: 15px;
+}
+.card h2 { margin: 0; font-variant: small-caps; color: var(--accent); font-size: 1.45rem; }
+.card h2 a { text-decoration: none; }
+.card .sub { margin: .15rem 0 .6rem; font-style: italic; color: var(--muted); font-size: .9rem; }
+.card .body p { margin: .45rem 0; }
+.card footer { margin-top: .8rem; padding-top: .5rem; border-top: 1px solid var(--edge); font-size: .65rem; color: var(--muted); }
+.r-common { --accent: var(--r-common); } .r-uncommon { --accent: var(--r-uncommon); }
+.r-rare { --accent: var(--r-rare); } .r-very-rare { --accent: var(--r-very-rare); }
+.r-legendary { --accent: var(--r-legendary); } .r-artifact { --accent: var(--r-artifact); }
+
+.share textarea { width: 100%; font-family: ui-monospace, monospace; font-size: .8rem; margin-top: .3rem; }
+.share { max-width: 420px; margin: 1rem auto; }
+.missing { text-align: center; padding: 2rem; }
+
+#q { width: 100%; padding: .6rem .8rem; font-size: 1rem; border: 2px solid var(--edge); border-radius: 8px; background: var(--paper); }
+#filters { display: flex; gap: .5rem; flex-wrap: wrap; margin: .6rem 0; }
+#filters select { padding: .3rem; background: var(--paper); border: 1px solid var(--edge); border-radius: 6px; }
+#list { list-style: none; padding: 0; margin: 0; }
+#list li { padding: .45rem .2rem; border-bottom: 1px solid var(--edge); display: flex; justify-content: space-between; gap: .5rem; }
+#list li a { text-decoration: none; font-weight: bold; }
+#list .meta { color: var(--muted); font-size: .85rem; text-align: right; }
+.count { color: var(--muted); font-size: .85rem; }
+.legal { font-size: .7rem; color: var(--muted); margin-top: 2rem; }
