@@ -62,3 +62,23 @@ test("routes: card page, embed, API, 404, passthrough", async () => {
   assert.equal(get("/api/items/nope").status, 404);
   assert.equal(get("/"), null);
 });
+
+test("table overrides replace flattened source text", () => {
+  const wand = bySlug.get("wand-of-wonder");
+  const t = wand.body.find((b) => b.table).table;
+  assert.deepEqual(t.columns, ["1d100", "Effect"]);
+  assert.equal(t.rows[0][0], "01–20");
+  assert.equal(t.rows.at(-1)[0], "98–00");
+  for (const i of items) {
+    for (const b of i.body) {
+      if (typeof b === "string") continue;
+      for (const r of b.table.rows) assert.equal(r.length, b.table.columns.length, `${i.slug} row width`);
+    }
+  }
+});
+
+test("cards render tables as HTML tables", () => {
+  const html = renderCard(bySlug.get("efreeti-bottle"));
+  assert.match(html, /<table><thead><tr><th>1d10<\/th><th>Effect<\/th>/);
+  assert.equal((html.match(/<tr>/g) ?? []).length, 4);
+});

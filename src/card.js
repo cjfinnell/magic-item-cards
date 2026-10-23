@@ -33,13 +33,24 @@ function para(text) {
   return `<p>${esc(text)}</p>`;
 }
 
+function table({ caption, columns, rows }) {
+  const head = columns.map((c) => `<th>${esc(c)}</th>`).join("");
+  const body = rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("");
+  const cap = caption ? `<caption>${esc(caption)}</caption>` : "";
+  return `<table>${cap}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+function block(b) {
+  return typeof b === "string" ? para(b) : table(b.table);
+}
+
 export function renderCard(item, { link } = {}) {
   const title = link
     ? `<a href="${esc(link)}" target="_blank" rel="noopener">${esc(item.name)}</a>`
     : esc(item.name);
   return `<article class="card ${rarityClass(item.rarity)}">
   <header><h2>${title}</h2><p class="sub">${esc(subtitle(item))}</p></header>
-  <div class="body">${item.body.map(para).join("")}</div>
+  <div class="body">${item.body.map(block).join("")}</div>
   <footer>${ATTRIBUTION}</footer>
 </article>`;
 }

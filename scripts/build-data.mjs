@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const SRC = new URL("../data/srd/5e-SRD-Magic-Items.json", import.meta.url);
+const OVERRIDES = new URL("../data/srd/table-overrides.json", import.meta.url);
 const OUT = new URL("../src/items.gen.json", import.meta.url);
 
 const RARITY_LINE = /^(Common|Uncommon|Rare|Very Rare|Legendary|Artifact)\b[^.]{0,30}$/;
@@ -25,8 +26,17 @@ export function slimItem(raw) {
   };
 }
 
-export function buildItems(rawItems) {
+// The upstream JSON flattens tables into run-on text and drops rows. These bodies are
+// rebuilt from the SRD 5.2 PDF; table entries are {table: {caption, columns, rows}}.
+export function loadOverrides() {
+  return JSON.parse(readFileSync(OVERRIDES, "utf8"));
+}
+
+export function buildItems(rawItems, overrides = loadOverrides()) {
   const items = rawItems.map(slimItem);
+  for (const item of items) {
+    if (overrides[item.slug]) item.body = overrides[item.slug];
+  }
   const bySlug = new Map(items.map((i) => [i.slug, i]));
   for (const parent of items) {
     for (const child of parent.variants) {

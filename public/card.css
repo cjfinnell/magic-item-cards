@@ -38,3 +38,9 @@ a { color: inherit; }
 #list .meta { color: var(--muted); font-size: .85rem; text-align: right; }
 .count { color: var(--muted); font-size: .85rem; }
 .legal { font-size: .7rem; color: var(--muted); margin-top: 2rem; }
+.card .body table { width: 100%; border-collapse: collapse; margin: .6rem 0; font-size: .88rem; }
+.card .body caption { font-weight: bold; text-align: left; padding-bottom: .25rem; }
+.card .body th { text-align: left; border-bottom: 2px solid var(--muted); padding: .2rem .4rem; }
+.card .body td { vertical-align: top; padding: .25rem .4rem; border-bottom: 1px solid rgba(0,0,0,.12); }
+.card .body td:first-child { white-space: nowrap; }
+.card .body tbody tr:nth-child(even) { background: rgba(0,0,0,.04); }
